@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.js with Menu</title>
+  <link rel="stylesheet" href="style.css"> <!-- 引入外部 CSS -->
+</head>
+<body>
+  <!-- 選單 -->
+  <ul id="menu">
+    <li class="dropdown">首頁
+      <ul class="dropdown-menu">
+        <li><a href="#" onclick="showSketch()">GO</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">自我介紹
+      <ul class="dropdown-menu">
+        <li><a href="#" onclick="showBasicInfo()">基本資訊</a></li>
+        <li><a href="#" onclick="showHobbies()">興趣愛好</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">作品集
+      <ul class="dropdown-menu">
+        <li><a href="#" onclick="loadIframe('https://yongzhen9436.github.io/20250303/')">作業1</a></li>
+        <li><a href="#" onclick="loadIframe('https://hackmd.io/@HNe8Dm5ZTiC8ZzA_UdZ_NQ/BkekjtC0Jg')">hackMD</a></li>
+      </ul>
+    </li>
+    <li class="dropdown">測驗題
+      <ul class="dropdown-menu">
+        <li><a href="#" onclick="showQuestion('1 + 1 = ?', ['A: 1', 'B: 2', 'C: 3'], 'B: 2')">第一題</a></li>
+        <li><a href="#" onclick="showQuestion('1 + 2 = ?', ['A: 1', 'B: 2', 'C: 3'], 'C: 3')">第二題</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <!-- 自我介紹框 -->
+  <div id="info-box">
+    <p id="info-content"></p>
+  </div>
+
+  <!-- 測驗題框 -->
+  <div id="quiz-box">
+    <p id="quiz-content"></p>
+    <div id="quiz-options"></div>
+  </div>
+
+  <!-- iframe -->
+  <iframe id="content-frame" src="" frameborder="0"></iframe>
+
+  <!-- 左下角圖片 -->
+  <img id="corner-image" src="Cinnamoroll_character-2.png" alt="Cinnamoroll_character-2.png">
+
+  <!-- p5.js 動畫 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+  <script src="sketch.js"></script>
+
+  <script>
+    // 動態載入 iframe 的內容
+    function loadIframe(url) {
+      const iframe = document.getElementById('content-frame');
+      iframe.src = url;
+      iframe.style.pointerEvents = "auto"; // 啟用 iframe 的互動
+      document.querySelector('canvas').style.opacity = "0.3"; // 動畫變透明
+      document.getElementById('corner-image').style.display = "none"; // 隱藏圖片
+      hideInfoBox(); // 隱藏自我介紹框
+      hideQuizBox(); // 隱藏測驗框
+    }
+
+    // 顯示 sketch.js 的動畫
+    function showSketch() {
+      const iframe = document.getElementById('content-frame');
+      iframe.src = ""; // 清空 iframe 的內容
+      iframe.style.pointerEvents = "none"; // 禁用 iframe 的互動
+      document.querySelector('canvas').style.opacity = "1"; // 動畫恢復不透明
+      document.getElementById('corner-image').style.display = "block"; // 顯示圖片
+      hideInfoBox(); // 隱藏自我介紹框
+      hideQuizBox(); // 隱藏測驗框
+    }
+
+    // 顯示基本資訊
+    function showBasicInfo() {
+      const infoBox = document.getElementById('info-box');
+      const infoContent = document.getElementById('info-content');
+      infoContent.textContent = "大家好我是潘詠楨，是淡江大學教科系的學生，謝謝大家。";
+      infoBox.style.display = 'block';
+      document.getElementById('corner-image').style.display = "block"; // 顯示圖片
+      hideQuizBox(); // 隱藏測驗框
+    }
+
+    // 顯示興趣愛好
+    function showHobbies() {
+      const infoBox = document.getElementById('info-box');
+      const infoContent = document.getElementById('info-content');
+      infoContent.textContent = "我的興趣是追劇看動漫還有看海跟睡覺。";
+      infoBox.style.display = 'block';
+      document.getElementById('corner-image').style.display = "block"; // 顯示圖片
+      hideQuizBox(); // 隱藏測驗框
+    }
+
+    // 顯示測驗題
+    function showQuestion(question, options, correctAnswer) {
+      const quizBox = document.getElementById('quiz-box');
+      const quizContent = document.getElementById('quiz-content');
+      const quizOptions = document.getElementById('quiz-options');
+      quizContent.textContent = question;
+      quizOptions.innerHTML = ""; // 清空選項
+      options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.style.margin = "5px";
+        button.onclick = () => {
+          if (option === correctAnswer) {
+            alert("你答對了！");
+          } else {
+            alert("你答錯了！");
+          }
+        };
+        quizOptions.appendChild(button);
+      });
+      quizBox.style.display = 'block';
+      document.getElementById('corner-image').style.display = "block"; // 顯示圖片
+      hideInfoBox(); // 隱藏自我介紹框
+    }
+
+    // 隱藏自我介紹框
+    function hideInfoBox() {
+      document.getElementById('info-box').style.display = 'none';
+    }
+
+    // 隱藏測驗框
+    function hideQuizBox() {
+      document.getElementById('quiz-box').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
